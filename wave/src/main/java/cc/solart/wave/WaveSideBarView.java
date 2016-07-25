@@ -96,7 +96,7 @@ public class WaveSideBarView extends View {
         mLetters = Arrays.asList(context.getResources().getStringArray(R.array.waveSideBarLetters));
 
         mTextColor = Color.parseColor("#969696");
-        mWaveColor =  Color.parseColor("#be69be91");
+        mWaveColor = Color.parseColor("#be69be91");
         mTextColorChoose = context.getResources().getColor(android.R.color.white);
         mTextSize = context.getResources().getDimensionPixelSize(R.dimen.textSize_sidebar);
         mPadding = context.getResources().getDimensionPixelSize(R.dimen.textSize_sidebar_padding);
@@ -280,6 +280,45 @@ public class WaveSideBarView extends View {
 
         mWavePath.close();
         canvas.drawPath(mWavePath, mWavePaint);
+
+        for (int i = 0; i < mLetters.size(); i++) {
+            mLettersPaint.reset();
+            mLettersPaint.setColor(mTextColor);
+            mLettersPaint.setAntiAlias(true);
+            mLettersPaint.setTextSize(mTextSize);
+            mLettersPaint.setTextAlign(Paint.Align.CENTER);
+
+            Paint.FontMetrics fontMetrics = mLettersPaint.getFontMetrics();
+            float baseline = Math.abs(-fontMetrics.bottom - fontMetrics.top);
+
+            float posY = mItemHeight * i + baseline / 2 + mPadding;
+
+            if (i == mChoose) {
+                mPosY = posY;
+            } else {
+                float moveTopX = (endTopX-mBallCentreX)/2;
+                float moveBottomX = (endBottomX-mBallCentreX)/2;
+
+                float moveTopY = (endTopX-controlCenterY)/2;
+                float moveBottomY = (endBottomY-controlCenterY)/2;
+
+                if(i==mChoose-2){
+                    canvas.drawText(mLetters.get(i), endTopX, controlTopY, mLettersPaint);
+                }
+                if(i==mChoose-1){
+                    canvas.drawText(mLetters.get(i), endTopX-moveTopX, endTopY, mLettersPaint);
+                }
+
+                if(i==mChoose+1){
+                    canvas.drawText(mLetters.get(i), endBottomX-moveBottomX, endBottomY, mLettersPaint);
+                }
+                if(i==mChoose+2){
+                    canvas.drawText(mLetters.get(i), endBottomX, controlBottomY, mLettersPaint);
+                }
+
+//
+            }
+        }
     }
 
     private void drawBallPath(Canvas canvas) {
